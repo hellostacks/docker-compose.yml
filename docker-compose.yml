@@ -14,24 +14,10 @@ services:
     ports:
       - "3306:3306"
     healthcheck:
-      test: ["CMD", "mysqladmin", "ping", "-h", "localhost"]
+      test: ["CMD", "mysqladmin", "ping", "-h", "localhost", "-uroot", "-pyourpassword"]
       interval: 10s
       timeout: 5s
-      retries: 3
-
-  redis:
-    image: redis:alpine
-    networks:
-      - webnet
-
-  nginx:
-    image: nginx:latest
-    ports:
-      - "80:80"
-    volumes:
-      - ./nginx:/usr/share/nginx/html
-    networks:
-      - webnet
+      retries: 5
 
   phpmyadmin:
     image: phpmyadmin/phpmyadmin
