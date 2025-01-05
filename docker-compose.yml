@@ -4,10 +4,10 @@ services:
     container_name: mysql_container
     image: mysql:5.7
     environment:
-      MYSQL_ROOT_PASSWORD: yourpassword
-      MYSQL_DATABASE: yourdatabase
-      MYSQL_USER: youruser
-      MYSQL_PASSWORD: youruserpassword
+      MYSQL_ROOT_PASSWORD: "yourpassword"
+      MYSQL_DATABASE: "yourdatabase"
+      MYSQL_USER: "youruser"
+      MYSQL_PASSWORD: "youruserpassword"
     volumes:
       - db-data:/var/lib/mysql
     networks:
@@ -23,9 +23,9 @@ services:
   phpmyadmin:
     image: phpmyadmin/phpmyadmin
     environment:
-      PMA_HOST: mysql
-      PMA_PORT: 3306
-      MYSQL_ROOT_PASSWORD: yourpassword
+      PMA_HOST: "mysql"
+      PMA_PORT: "3306"
+      MYSQL_ROOT_PASSWORD: "yourpassword"
     depends_on:
       mysql:
         condition: service_healthy
