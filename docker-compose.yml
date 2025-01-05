@@ -1,25 +1,18 @@
 version: '3.8'
 services:
-  nginx:
-    image: nginx:latest
-    ports:
-      - "80:80"
-    volumes:
-      - ./nginx:/usr/share/nginx/html
-    networks:
-      - webnet
-
   mysql:
     image: mysql:5.7
     environment:
-      MYSQL_ROOT_PASSWORD: yourpassword      # Root password for MySQL
-      MYSQL_DATABASE: yourdatabase           # Initial database name
-      MYSQL_USER: youruser                   # Non-root user
-      MYSQL_PASSWORD: youruserpassword       # Non-root user password
+      MYSQL_ROOT_PASSWORD: yourpassword
+      MYSQL_DATABASE: yourdatabase
+      MYSQL_USER: youruser
+      MYSQL_PASSWORD: youruserpassword
     volumes:
-      - db-data:/var/lib/mysql               # Persist MySQL data
+      - db-data:/var/lib/mysql
     networks:
       - webnet
+    ports:
+      - "3306:3306"
     healthcheck:
       test: ["CMD", "mysqladmin", "ping", "-h", "localhost"]
       interval: 10s
@@ -31,22 +24,31 @@ services:
     networks:
       - webnet
 
-  phpmyadmin:
-    image: phpmyadmin/phpmyadmin:latest
-    environment:
-      PMA_HOST: mysql                        # MySQL service name
-      PMA_PORT: 3306                         # MySQL port
-      MYSQL_ROOT_PASSWORD: yourpassword      # Root password for phpMyAdmin
+  nginx:
+    image: nginx:latest
     ports:
-      - "8080:80"                            # Host port:Container port
+      - "80:80"
+    volumes:
+      - ./nginx:/usr/share/nginx/html
+    networks:
+      - webnet
+
+  phpmyadmin:
+    image: phpmyadmin/phpmyadmin
+    environment:
+      PMA_HOST: mysql
+      PMA_PORT: 3306
+      MYSQL_ROOT_PASSWORD: yourpassword
     depends_on:
       mysql:
-        condition: service_healthy           # Wait for MySQL to be healthy
+        condition: service_healthy
+    ports:
+      - "8080:80"
     networks:
       - webnet
 
 volumes:
-  db-data:                                   # Named volume for MySQL data
+  db-data:
 
 networks:
-  webnet:                                    # Custom network for all services
+  webnet:
