@@ -9,15 +9,13 @@ services:
     networks:
       - webnet
 
-
-
   mysql:
     image: mysql:5.7
     environment:
-      MYSQL_ROOT_PASSWORD: mypassword
-      MYSQL_DATABASE: mydatabase
-      MYSQL_USER: user
-      MYSQL_PASSWORD: userpassword
+      MYSQL_ROOT_PASSWORD: yourpassword
+      MYSQL_DATABASE: yourdatabase
+      MYSQL_USER: youruser
+      MYSQL_PASSWORD: youruserpassword
     volumes:
       - db-data:/var/lib/mysql
     networks:
@@ -25,6 +23,19 @@ services:
 
   redis:
     image: redis:alpine
+    networks:
+      - webnet
+
+  phpmyadmin:
+    image: phpmyadmin/phpmyadmin
+    environment:
+      PMA_HOST: mysql
+      PMA_PORT: 3306
+      MYSQL_ROOT_PASSWORD: yourpassword
+    ports:
+      - "8080:80"
+    depends_on:
+      - mysql
     networks:
       - webnet
 
